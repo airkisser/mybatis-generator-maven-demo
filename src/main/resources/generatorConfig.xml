@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE generatorConfiguration
+        PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN"
+        "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd">
+
+<generatorConfiguration>
+    <!-- 1.指定配置文件路径，在这里我们使用绝对路径，如果使用properties的resource属性，需要设置classpath -->
+    <!--<properties  url="file:///G:/workspace/ideaWorkSpace/mybatis-generator-maven-demo/src/test/resources/init.properties"/>-->
+    <properties  url="file:///G:/workspace/ideaWorkSpace/mybatis-generator-maven-demo/src/main/resources/jdbc-dev.properties"/>
+    <!-- 2.指定数据库驱动jar的位置，同上，使用绝对路径.plugin中配置dependency后此处可不再配置  -->
+    <!--<classPathEntry location="D:/maven/repo/mysql/mysql-connector-java/6.0.3/mysql-connector-java-6.0.3.jar" />-->
+    <!--<classPathEntry location="classpath:mysql-connector-java-6.0.3.jar" />-->
+
+    <context id="MysqlContext" targetRuntime="MyBatis3" defaultModelType="flat">
+        <property name="beginningDelimiter" value="`"/>
+        <property name="endingDelimiter" value="`"/>
+
+        <plugin type="org.mybatis.generator.plugins.SerializablePlugin"/>
+
+        <plugin type="org.mybatis.generator.plugins.EqualsHashCodePlugin" />
+
+        <!--可选，注释生成器-->
+        <commentGenerator>
+            <!-- suppressAllComments:**阻止**生成注释(true)，默认为false
+                 suppressDate:**阻止**生成的注释包含时间戳(true)，默认为false -->
+            <property name="suppressAllComments" value="false"/>
+            <property name="suppressDate" value="true"/>
+        </commentGenerator>
+
+        <!--必须，数据库连接的信息：驱动类、连接地址、用户名、密码 -->
+        <jdbcConnection driverClass="${datasource.driverClassName}"
+                        connectionURL="${datasource.url}"
+                        userId="${datasource.username}"
+                        password="${datasource.password}">
+        </jdbcConnection>
+
+        <!-- 可选，类型转换器或者加类型解析器 -->
+        <!-- 默认false：把JDBC DECIMAL 和 NUMERIC 类型解析为 Integer
+             true：把JDBC DECIMAL 和 NUMERIC 类型解析为java.math.BigDecimal -->
+        <javaTypeResolver >
+            <property name="forceBigDecimals" value="false" />
+        </javaTypeResolver>
+
+        <!-- 必须,java模型生成器 -->
+        <!-- targetProject:自动生成代码的位置 -->
+        <javaModelGenerator targetPackage="com.airkisser.mybatis.model" targetProject="MAVEN">
+            <!--enableSubPackages:是否让schema作为包的后缀-->
+            <property name="enableSubPackages" value="false" />
+            <!-- 从数据库返回的值被清理前后的空格 -->
+            <property name="trimStrings" value="true" />
+        </javaModelGenerator>
+
+        <!-- 必须,mapper.xml 生成器 -->
+        <sqlMapGenerator targetPackage="com.airkisser.mybatis.mapping"  targetProject="MAVEN">
+            <property name="enableSubPackages" value="false"/>
+        </sqlMapGenerator>
+
+        <!-- 可选，mapper 或者就是dao接口生成器 -->
+        <javaClientGenerator type="XMLMAPPER" targetPackage="com.airkisser.mybatis.dao"  targetProject="MAVEN">
+            <property name="enableSubPackages" value="false" />
+        </javaClientGenerator>
+
+        <!-- 必须的（1...N），pojo 实体生成器 -->
+        <!-- tableName:用于自动生成代码的数据库表；domainObjectName:对应于数据库表的javaBean类名 -->
+        <!-- schema即为数据库名 可不写 -->
+        <!--
+            配置以下几个属性阻止无用的Example文件生成
+            enableCountByExample="false" enableUpdateByExample="false"
+            enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false"
+        -->
+        <table tableName="user" domainObjectName="User" enableCountByExample="false" enableUpdateByExample="false"
+               enableDeleteByExample="false" enableSelectByExample="false" selectByExampleQueryId="false">
+            <generatedKey column="id" sqlStatement="MySql"/>
+        </table>
+
+    </context>
+</generatorConfiguration>
